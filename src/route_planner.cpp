@@ -15,7 +15,7 @@ RoutePlanner::RoutePlanner(RouteModel &model, float start_x, float start_y, floa
 
 float RoutePlanner::CalculateHValue(RouteModel::Node const *node) {
     return node->distance(*RoutePlanner::end_node);
-}:
+}
 
 void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
     current_node->FindNeighbors();
@@ -29,7 +29,7 @@ void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
 }
 
 bool compare(const RouteModel::Node* node1, const RouteModel::Node* node2){
-    return node1->g_value + node1->h_value < node2->g_value + node2->h_value;
+    return node1->g_value + node1->h_value < node2->g_value + node2->h_value; // this predicate is so that std::sort will sort by the h_value attribute of the node objects
 }
 
 RouteModel::Node *RoutePlanner::NextNode() {
@@ -49,6 +49,7 @@ std::vector<RouteModel::Node> RoutePlanner::ConstructFinalPath(RouteModel::Node 
         current_node = current_node->parent;
     }
     path_found.push_back(*current_node);
+    std::reverse(path_found.begin(), path_found.end());
     distance *= m_Model.MetricScale(); // Multiply the distance by the scale of the map to get meters.
     return path_found;
 
